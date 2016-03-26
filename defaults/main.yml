@@ -21,3 +21,4 @@ jenkins_plugins:
   - ssh
   - job-dsl
   - cloudbees-folder
+  - jira
