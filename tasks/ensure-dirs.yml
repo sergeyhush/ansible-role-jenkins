@@ -1,0 +1,4 @@
+---
+- name: Create Jenkins plugins directory
+  file: path={{ jenkins_updates_dir }} state=directory owner={{jenkins_user}} group={{jenkins_group}} mode=0755
+  tags: [configuration,jenkins]

@@ -1,0 +1,23 @@
+---
+jenkins_user: jenkins
+jenkins_group: "{{ jenkins_user }}"
+jenkins_repo_url: "deb http://pkg.jenkins-ci.org/debian binary/"
+jenkins_repo_key_url: "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
+jenkins_init_file: /etc/default/jenkins
+jenkins_pkg:
+  - git
+  - curl
+  - python-httplib2
+  - jenkins
+jenkins_binary_name: "jenkins"
+jenkins_service_name: "{{jenkins_binary_name}}"
+jenkins_host_name: localhost
+jenkins_http_port: 8080
+jenkins_url: "http://{{ jenkins_host_name}}:{{jenkins_http_port}}"
+jenkins_jar_location: /opt/jenkins-cli.jar
+jenkins_updates_dir: /var/lib/jenkins/updates
+jenkins_plugins:
+  - git
+  - ssh
+  - job-dsl
+  - cloudbees-folder

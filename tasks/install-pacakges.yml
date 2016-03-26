@@ -1,0 +1,13 @@
+---
+- name: Ensure APT official jenkins key
+  apt_key: url="{{ jenkins_repo_key_url }}"
+  tags: [packages,jenkins]
+
+- name: Ensure APT official jenkins repository
+  apt_repository: repo="{{ jenkins_repo_url }}"
+  tags: [packages,jenkins]
+
+- name: Install the jenkins packages
+  apt: name={{ item }} state=present
+  with_items: "{{ jenkins_pkg }}"
+  tags: [packages,jenkins]

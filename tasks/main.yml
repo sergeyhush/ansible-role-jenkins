@@ -1,0 +1,23 @@
+---
+- include: install-packages.yml
+- include: ensure-dirs.yml
+
+- name: Start the jenkins service
+  service: name={{ jenkins_service_name }} state=started enabled=yes
+  tags: [service,jenkins]
+
+- name: Wait until Jenkins UI is available
+  uri: url="{{ jenkins_url }}/cli/" method=GET status_code=200
+  retries: 12
+  delay: 5
+
+- name: Get jenkins-cli
+  get_url:
+    url: "{{ jenkins_url }}/jnlpJars/jenkins-cli.jar"
+    dest: "{{ jenkins_jar_location }}"
+  register: jarfile_get
+  until: "'OK' in jarfile_get.msg or 'file already exists' in jarfile_get.msg"
+  retries: 5
+  delay: 10
+
+- include: install-plugins.yml

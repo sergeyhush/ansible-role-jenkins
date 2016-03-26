@@ -1,0 +1,20 @@
+---
+- name: Update Jenkins plugin data.
+  shell: >
+    curl -L https://updates.jenkins-ci.org/update-center.json | sed '1d;$d' > {{ jenkins_updates_dir }}/default.json
+    creates={{ jenkins_updates_dir }}/default.json
+
+- name: Permissions for default.json updates info.
+  file:
+    path: "{{ jenkins_updates_dir }}/default.json"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: 0755
+
+- name: Install Jenkins plugins.
+  command: >
+    java -jar {{ jenkins_jar_location }} -s {{ jenkins_url }} install-plugin {{ item }}
+    creates=/var/lib/jenkins/plugins/{{ item }}.jpi
+  with_items: "{{ jenkins_plugins }}"
+  notify: restart jenkins
+
