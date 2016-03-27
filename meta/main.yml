@@ -23,4 +23,4 @@ galaxy_info:
     - development
     - packaging
 
-  dependencies: []
+dependencies: []
