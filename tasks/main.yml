@@ -6,10 +6,14 @@
   service: name={{ jenkins_service_name }} state=started enabled=yes
   tags: [service,jenkins]
 
-- name: Wait until Jenkins UI is available
-  uri: url="{{ jenkins_url }}/cli/" method=GET status_code=200
-  retries: 12
-  delay: 5
+- name: Wait on Jenkins UI
+  command  : curl --head --silent {{ jenkins_url }}/cli
+  register : jenkins_check_available
+  until    : (jenkins_check_available.stdout.find("200 OK") != -1) or
+             (jenkins_check_available.stdout.find("403 Forbidden") != -1)
+  retries  : 12
+  delay    : 5
+  changed_when : False
 
 - name: Get jenkins-cli
   get_url:
